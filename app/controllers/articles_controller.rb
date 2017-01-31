@@ -7,6 +7,8 @@ class ArticlesController < ApplicationController
 
 	def show
 		@article = Article.find(params[:id])
+		@comment = Comment.new
+		@comment.article_id = @article.id
 	end
 
 	def new
@@ -14,22 +16,10 @@ class ArticlesController < ApplicationController
 	end
 
 	def create
-=begin
-v1
-		@article = Article.new
-  		@article.title = params[:article][:title]
-  		@article.body = params[:article][:body]
-  		@article.save
-  		redirect_to article_path(@article)
-	#v2
-  		@article = Article.new(
-  			title: params[:article][:title],
-    			body: params[:article][:body])
-  		@article.save
-  		redirect_to article_path(@article)
-=end
 		@article = Article.new(article_params)
 		@article.save
+
+		flash.notice = "Article '#{@article.title}' Created!"
   		redirect_to article_path(@article)
 	end
 
@@ -47,7 +37,26 @@ v1
 	end
 
 	def destroy
-	Article.find(params[:id]).destroy	
+	Article.find(params[:id]).destroy
+	flash.notice = "Article '#{@article.title}' Destroyed!"	
 	redirect_to articles_path
 	end
 end
+
+
+
+=begin
+create
+	v1
+		@article = Article.new
+  		@article.title = params[:article][:title]
+  		@article.body = params[:article][:body]
+  		@article.save
+  		redirect_to article_path(@article)
+	#v2
+  		@article = Article.new(
+  			title: params[:article][:title],
+    			body: params[:article][:body])
+  		@article.save
+  		redirect_to article_path(@article)
+=end
